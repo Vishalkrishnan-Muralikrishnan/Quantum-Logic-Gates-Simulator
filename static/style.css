@@ -1,16 +1,10 @@
-body {
-    font-family: Arial; 
-    text-align:center; 
-    background:#111; 
-    color:#fff; 
-}
-h1 { margin-bottom: 30px; }
-
-.gate-panel { margin-bottom: 20px; }
-button { margin:5px; padding:10px; font-size:16px; cursor:pointer; }
-
-#circuit { display: flex; justify-content:center; margin-top: 20px; }
-
-.qubit { display:inline-block; margin:20px; }
-.led { width: 50px; height: 50px; border-radius: 50%; background: #222; margin-bottom:10px; transition:0.5s; }
-.prob { font-size:14px; }
+body { background: #111; color: white; font-family: sans-serif; text-align: center; }
+#palette { margin-bottom: 20px; }
+.gate-tile { display:inline-block; padding:8px 12px; margin:4px; background:#444; color:#fff; cursor:grab; user-select:none; border-radius:5px; }
+#grid { border:1px solid #666; display:inline-block; margin-top:20px; }
+.row { display:flex; }
+.cell { width:50px; height:50px; border:1px solid #666; margin:2px; position:relative; border-radius:5px; }
+.cell .g { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; pointer-events:none; color:white; font-weight:bold; }
+.led { width:50px; height:50px; border-radius:50%; background:#222; margin:10px auto; transition:0.5s; }
+#output div { margin:5px 0; }
+#legend { margin-top:20px; text-align:left; display:inline-block; background:#222; padding:10px; border-radius:10px; }
