@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quantum Logic Gates Simulator</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<h1>Quantum Logic Gates: The Orchestra</h1>
 
+<div class="gate-panel">
+  <h3>Add Gates:</h3>
+  <button onclick="addGate('H',[0])">H (Q0)</button>
+  <button onclick="addGate('X',[0])">X (Q0)</button>
+  <button onclick="addGate('Y',[0])">Y (Q0)</button>
+  <button onclick="addGate('Z',[0])">Z (Q0)</button>
+  <button onclick="addGate('S',[0])">S (Q0)</button>
+  <button onclick="addGate('T',[0])">T (Q0)</button>
+  <button onclick="addGate('CNOT',[0,1])">CNOT (Q0→Q1)</button>
+  <button onclick="addGate('SWAP',[0,1])">SWAP (Q0,Q1)</button>
+</div>
+
+<div id="circuit">
+  <div class="qubit" id="q0">
+    <div class="led" id="led0"></div>
+    <div class="prob" id="prob0">0.00</div>
+  </div>
+  <div class="qubit" id="q1">
+    <div class="led" id="led1"></div>
+    <div class="prob" id="prob1">0.00</div>
+  </div>
+</div>
+
+<button onclick="runCircuit()">Run Circuit</button>
+
+<script>
+let circuit = [];
+
+function addGate(type, qubits) {
+    circuit.push({type:type, qubits:qubits});
+    alert(`Added gate ${type} on qubits ${qubits}`);
+}
+
+function updateQubits(probabilities) {
+    probabilities.forEach((p,i)=>{
+        const led = document.getElementById(`led${i}`);
+        const probText = document.getElementById(`prob${i}`);
+        let brightness = Math.floor(p*255);
+        led.style.background = `rgb(${brightness},0,${255-brightness})`;
+        probText.innerText = p.toFixed(2);
+    });
+}
+
+async function runCircuit(){
+    const response = await fetch('/run',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({circuit:circuit})
+    });
+    const data = await response.json();
+    updateQubits(data.probabilities);
+    circuit = [];
+}
+</script>
+</body>
+</html>
