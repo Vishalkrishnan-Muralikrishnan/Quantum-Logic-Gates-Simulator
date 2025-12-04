@@ -11,9 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Bootstrap tooltips
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
+  tooltipTriggerList.map(function (el) { return new bootstrap.Tooltip(el); });
 });
 
 function setupGrid(){
@@ -51,14 +49,22 @@ function renderGrid(){
 
 async function simulate(){
   const n=parseInt(document.getElementById('numQ').value);
-  const resp=await fetch('/simulate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({num_qubits:n,gates:gates})});
-  const data=await resp.json(); showProbs(data.probabilities);
+  const resp=await fetch('/simulate',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({num_qubits:n,gates:gates})
+  });
+  const data=await resp.json(); 
+  showProbs(data.probabilities);
 }
 
 function showProbs(probs){
   const out=document.getElementById('output'); out.innerHTML='';
   probs.forEach((p,i)=>{
-    const div=document.createElement('div'); div.innerText=`Qubit ${i}: P(|1>)=${p.toFixed(2)}`;
+    const div=document.createElement('div'); 
+    div.innerText=`Qubit ${i}: ${(p*100).toFixed(1)}%`;
     out.appendChild(div);
+    setTimeout(()=>{div.style.width=`${p*100}%`;},50);
   });
 }
+
