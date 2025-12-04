@@ -1,112 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Quantum Drag & Drop Simulator</title>
-  <style>
-    body { background: #111; color: white; font-family: sans-serif; text-align: center; }
-    #palette { margin-bottom: 20px; }
-    .gate-tile { display:inline-block; padding:8px 12px; margin:4px; background:#444; color:#fff; cursor:grab; user-select:none; }
-    #grid { border:1px solid #666; display: inline-block; }
-    .row { display: flex; }
-    .cell { width:40px; height:40px; border:1px solid #666; margin:2px; position: relative; }
-    .cell .g { position: absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; pointer-events:none; color:white; }
-    .led { width: 50px; height: 50px; border-radius:50%; background: #222; margin: 10px auto; transition: 0.5s; }
-  </style>
+<meta charset="utf-8">
+<title>Quantum Circuit Simulator</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>Quantum Circuit Simulator</h1>
+<h1>Quantum Circuit Simulator</h1>
 
-  <div id="palette">
-    <div class="gate-tile" draggable="true" data-gate="H">H</div>
-    <div class="gate-tile" draggable="true" data-gate="X">X</div>
-    <div class="gate-tile" draggable="true" data-gate="Z">Z</div>
-    <div class="gate-tile" draggable="true" data-gate="CNOT">CNOT</div>
-  </div>
+<div id="palette">
+  <div class="gate-tile" draggable="true" data-gate="H">H (Hadamard)</div>
+  <div class="gate-tile" draggable="true" data-gate="X">X (Pauli-X)</div>
+  <div class="gate-tile" draggable="true" data-gate="Z">Z (Pauli-Z)</div>
+  <div class="gate-tile" draggable="true" data-gate="CNOT">CNOT</div>
+</div>
 
-  <div>
-    <label>Qubits: <input type="number" id="numQ" value="2" min="1" max="5" /></label>
-    <button onclick="setupGrid()">Set Qubits</button>
-  </div>
+<div>
+  <label>Qubits: <input type="number" id="numQ" value="2" min="1" max="5"></label>
+  <button onclick="setupGrid()">Set Qubits</button>
+</div>
 
-  <div id="grid"></div>
+<div id="grid"></div>
 
-  <button onclick="simulate()">Run Circuit</button>
+<button onclick="simulate()">Run Circuit</button>
 
-  <div id="output"></div>
+<div id="output"></div>
 
-<script>
-let gates = []; // will store objects {type, qubits:[...], time:col}
-let dragGate = null;
+<div id="legend">
+  <h3>Gate Info & Quantum Concepts</h3>
+  <ul>
+    <li><b>H (Hadamard)</b>: Puts qubit in superposition |0>+|1></li>
+    <li><b>X (Pauli-X)</b>: Bit-flip gate (|0>↔|1>)</li>
+    <li><b>Z (Pauli-Z)</b>: Phase flip |1>→-|1></li>
+    <li><b>CNOT</b>: Entangles two qubits; flips target if control=1</li>
+    <li><b>Superposition</b>: Qubit exists in both 0 and 1 states simultaneously</li>
+    <li><b>Entanglement</b>: Qubits are correlated even when separated</li>
+  </ul>
+</div>
 
-document.querySelectorAll('.gate-tile').forEach(tile => {
-  tile.addEventListener('dragstart', ev => {
-    dragGate = ev.target.getAttribute('data-gate');
-  });
-});
-
-function setupGrid(){
-  const n = parseInt(document.getElementById('numQ').value);
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  for(let i=0;i<n;i++){
-    const row = document.createElement('div');
-    row.className = 'row';
-    for(let c=0;c<8;c++){
-      const cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.ondragover = ev => ev.preventDefault();
-      cell.ondrop = ev => {
-        ev.preventDefault();
-        placeGate(i, c);
-      };
-      row.appendChild(cell);
-    }
-    grid.appendChild(row);
-  }
-  gates = []; // reset
-}
-
-function placeGate(qubit, time){
-  gates.push({type: dragGate, qubits: [qubit], time: time});
-  renderGrid();
-}
-
-function renderGrid(){
-  const rows = document.querySelectorAll('.row');
-  gates.forEach(g => {
-    const cell = rows[g.qubits[0]].children[g.time];
-    let el = cell.querySelector('.g');
-    if(!el){
-      el = document.createElement('div');
-      el.className = 'g';
-      cell.appendChild(el);
-    }
-    el.innerText = g.type;
-  });
-}
-
-async function simulate(){
-  const n = parseInt(document.getElementById('numQ').value);
-  const resp = await fetch('/simulate', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({num_qubits: n, gates: gates})
-  });
-  const data = await resp.json();
-  showProbs(data.probabilities);
-}
-
-function showProbs(probs){
-  const out = document.getElementById('output');
-  out.innerHTML = '';
-  probs.forEach((p,i) => {
-    const div = document.createElement('div');
-    div.innerText = `Qubit ${i}: P(|1>) = ${p.toFixed(2)}`;
-    out.appendChild(div);
-  });
-}
-</script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
-
