@@ -1,52 +1,31 @@
-body {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #a1c4fd 100%);
-    color: #333;
-    font-family: 'Segoe UI', sans-serif;
+/* Glow animation for gate placement */
+.gate-placed {
+    animation: glow 1s ease-in-out;
 }
 
-/* Pop-out card effect */
-.card {
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 25px rgba(0,0,0,0.35);
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #fff; transform: scale(1.05); }
+    50% { box-shadow: 0 0 20px #00f, 0 0 30px #0ff; transform: scale(1.15); }
+    100% { box-shadow: 0 0 5px #fff; transform: scale(1.05); }
 }
 
-/* Gate tiles */
-.gate-tile {
-    cursor: grab;
-    transition: transform 0.2s, background 0.3s;
-    font-weight: bold;
-}
-.gate-tile:hover {
-    transform: scale(1.2);
+/* Qubit neon circle inside cell (optional for future qubit animation) */
+.qubit-circle {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #0ff;
+    box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    transition: background 0.3s, box-shadow 0.3s;
 }
 
-/* Circuit cells */
-#grid .row { display: flex; }
-#grid .cell {
-    width: 70px; height: 70px;
-    margin: 4px;
-    background: #fff;
-    border: 2px solid #00c3ff;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.3s, transform 0.2s;
+/* Chart neon glow styling */
+#probChart {
+    max-width: 700px;
+    margin: 0 auto;
 }
-#grid .cell.drop-target { background: rgba(0,195,255,0.3); transform: scale(1.05); }
 
-/* Probability bars */
-#output div {
-    margin: 6px auto;
-    height: 25px;
-    width: 0%;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #ff6a00, #ee0979);
-    color: #fff;
-    font-weight: bold;
-    display: flex; align-items: center; justify-content: center;
-    transition: width 1s;
+/* Drop target highlight */
+.cell.drop-target {
+    border: 2px dashed #0ff;
 }
+
