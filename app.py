@@ -14,10 +14,10 @@ def index():
 def simulate():
     data = request.get_json()
     num_qubits = data.get('num_qubits', 2)
-    gates = data.get('gates', [])  # list of {type, qubits, time}
+    gates = sorted(data.get('gates', []), key=lambda x: x['time'])
 
     qc = QuantumCircuit(num_qubits)
-    for g in sorted(gates, key=lambda x: x['time']):
+    for g in gates:
         t = g['type']
         qs = g['qubits']
         if t == 'H':
@@ -27,19 +27,23 @@ def simulate():
         elif t == 'Z':
             qc.z(qs[0])
         elif t == 'CNOT':
-            if len(qs) == 2:
+            if len(qs)==2:
                 qc.cx(qs[0], qs[1])
-        # Add more gates here
-
+        elif t=='Y':
+            qc.y(qs[0])
+        elif t=='S':
+            qc.s(qs[0])
+        elif t=='T':
+            qc.t(qs[0])
     qc.measure_all()
     job = sim.run(qc, shots=1000)
     result = job.result()
     counts = result.get_counts()
 
-    probs = []
+    probs=[]
     for i in range(num_qubits):
-        p1 = sum(v for k, v in counts.items() if k[num_qubits - 1 - i] == '1')
-        probs.append(p1 / 1000)
+        p1 = sum(v for k,v in counts.items() if k[num_qubits-1-i]=='1')
+        probs.append(p1/1000)
 
     return jsonify({'probabilities': probs})
 
