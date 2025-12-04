@@ -3,49 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <title>Quantum Circuit Simulator</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<div class="header">
-    <h1>Quantum Circuit Simulator</h1>
-    <p>Drag gates onto the circuit and see real-time probabilities and entanglement!</p>
-</div>
+<div class="container mt-4">
+  <div class="text-center mb-4">
+    <h1 class="display-5 text-info">Quantum Circuit Simulator</h1>
+    <p class="lead text-light">Drag and drop gates onto the grid. Run circuit to see probabilities.</p>
+  </div>
 
-<div id="palette">
-    <div class="gate-tile" draggable="true" data-gate="H">H</div>
-    <div class="gate-tile" draggable="true" data-gate="X">X</div>
-    <div class="gate-tile" draggable="true" data-gate="Z">Z</div>
-    <div class="gate-tile" draggable="true" data-gate="CNOT">CNOT</div>
-    <div class="gate-tile" draggable="true" data-gate="Y">Y</div>
-    <div class="gate-tile" draggable="true" data-gate="S">S</div>
-    <div class="gate-tile" draggable="true" data-gate="T">T</div>
-</div>
+  <!-- Gate Palette -->
+  <div class="card bg-dark text-light mb-4 p-3">
+    <div class="d-flex flex-wrap justify-content-center">
+      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="H" data-bs-toggle="tooltip" title="Hadamard: Superposition">H</div>
+      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="X" data-bs-toggle="tooltip" title="X: Bit flip">X</div>
+      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="Z" data-bs-toggle="tooltip" title="Z: Phase flip">Z</div>
+      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="Y" data-bs-toggle="tooltip" title="Y: Bit+Phase flip">Y</div>
+      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="S" data-bs-toggle="tooltip" title="S: Phase rotation">S</div>
+      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="T" data-bs-toggle="tooltip" title="T: Phase rotation">T</div>
+      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="CNOT" data-bs-toggle="tooltip" title="CNOT: Entanglement">CNOT</div>
+    </div>
+  </div>
 
-<div>
-    <label>Qubits: <input type="number" id="numQ" value="2" min="1" max="5"></label>
-    <button onclick="setupGrid()">Set Qubits</button>
-</div>
+  <!-- Controls -->
+  <div class="d-flex justify-content-center mb-3">
+    <input type="number" id="numQ" class="form-control me-2" value="2" min="1" max="5" style="width:80px;">
+    <button class="btn btn-success me-2" onclick="setupGrid()">Set Qubits</button>
+    <button class="btn btn-primary" onclick="simulate()">Run Circuit</button>
+  </div>
 
-<div id="circuit-container">
-    <div id="grid"></div>
-</div>
+  <!-- Circuit Grid -->
+  <div id="circuit-container" class="overflow-auto p-2 mb-4">
+    <div id="grid" class="d-inline-block bg-dark p-3 rounded"></div>
+  </div>
 
-<button id="run-btn" onclick="simulate()">Run Circuit</button>
+  <!-- Output / Probability Bars -->
+  <div id="output" class="text-center mb-4"></div>
 
-<div id="output"></div>
-
-<div id="legend">
-    <h3>Gate Info & Quantum Concepts</h3>
-    <ul>
-        <li><b>H (Hadamard)</b>: Puts qubit in superposition</li>
-        <li><b>X (Pauli-X)</b>: Bit-flip</li>
-        <li><b>Z (Pauli-Z)</b>: Phase-flip</li>
-        <li><b>Y (Pauli-Y)</b>: Combines X & Z</li>
-        <li><b>S, T</b>: Phase rotation gates</li>
-        <li><b>CNOT</b>: Entangles 2 qubits</li>
-        <li><b>Superposition</b>: Qubit exists in 0 and 1 simultaneously</li>
-        <li><b>Entanglement</b>: Qubits correlated even far apart</li>
+  <!-- Legend / Info -->
+  <div class="card bg-secondary text-light p-3 mb-4">
+    <h4>Gate & Concept Info</h4>
+    <ul class="list-group list-group-flush text-light">
+      <li class="list-group-item bg-secondary">H: Hadamard - Superposition</li>
+      <li class="list-group-item bg-secondary">X: Bit flip |0> ↔ |1></li>
+      <li class="list-group-item bg-secondary">Z: Phase flip</li>
+      <li class="list-group-item bg-secondary">Y: X + Z</li>
+      <li class="list-group-item bg-secondary">S/T: Phase rotations</li>
+      <li class="list-group-item bg-secondary">CNOT: Entanglement</li>
+      <li class="list-group-item bg-secondary">Measurement collapses qubits to classical bits</li>
     </ul>
+  </div>
 </div>
 
 <script src="{{ url_for('static', filename='app.js') }}"></script>
