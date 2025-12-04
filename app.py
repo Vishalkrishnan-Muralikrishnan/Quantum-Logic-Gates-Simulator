@@ -4,45 +4,49 @@ from qiskit_aer import AerSimulator
 import os
 
 app = Flask(__name__)
-simulator = AerSimulator()
+sim = AerSimulator()
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/run', methods=['POST'])
-def run_circuit():
+@app.route('/simulate', methods=['POST'])
+def simulate():
     data = request.get_json()
-    gates = data.get('circuit', [])
-    num_qubits = 2
+    num_qubits = data.get('num_qubits', 2)
+    gates = data.get('gates', [])  # list of {type, qubits}
+
     qc = QuantumCircuit(num_qubits)
-    
-    # Add gates dynamically
-    for gate in gates:
-        g = gate['type']
-        q = gate['qubits']
-        if g == 'H': qc.h(q[0])
-        elif g == 'X': qc.x(q[0])
-        elif g == 'Y': qc.y(q[0])
-        elif g == 'Z': qc.z(q[0])
-        elif g == 'S': qc.s(q[0])
-        elif g == 'T': qc.t(q[0])
-        elif g == 'CNOT': qc.cx(q[0], q[1])
-        elif g == 'SWAP': qc.swap(q[0], q[1])
-    
+
+    for g in gates:
+        t = g['type']
+        qs = g['qubits']
+        if t == 'H':
+            qc.h(qs[0])
+        elif t == 'X':
+            qc.x(qs[0])
+        elif t == 'Z':
+            qc.z(qs[0])
+        elif t == 'CNOT':
+            qc.cx(qs[0], qs[1])
+        # Add other gates as needed
+
     qc.measure_all()
-    job = simulator.run(qc, shots=1000)
+    job = sim.run(qc, shots=1000)
     result = job.result()
     counts = result.get_counts()
-    
+
     probs = []
     for i in range(num_qubits):
-        prob = sum([v for k,v in counts.items() if k[num_qubits-1-i]=='1'])/1000
-        probs.append(prob)
-    
+        # measure bit i —  note: Qiskit string bits order is reversed
+        p1 = sum(v for k, v in counts.items() if k[num_qubits - 1 - i] == '1')
+        probs.append(p1 / 1000)
+
     return jsonify({'probabilities': probs})
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Get Render's port, default 5000 locally
+    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+
+
 
