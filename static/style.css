@@ -1,1 +1,16 @@
+body {
+    font-family: Arial; 
+    text-align:center; 
+    background:#111; 
+    color:#fff; 
+}
+h1 { margin-bottom: 30px; }
 
+.gate-panel { margin-bottom: 20px; }
+button { margin:5px; padding:10px; font-size:16px; cursor:pointer; }
+
+#circuit { display: flex; justify-content:center; margin-top: 20px; }
+
+.qubit { display:inline-block; margin:20px; }
+.led { width: 50px; height: 50px; border-radius: 50%; background: #222; margin-bottom:10px; transition:0.5s; }
+.prob { font-size:14px; }
