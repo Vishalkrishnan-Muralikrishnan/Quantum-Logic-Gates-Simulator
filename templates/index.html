@@ -10,20 +10,20 @@
 <body>
 <div class="container mt-4">
   <div class="text-center mb-4">
-    <h1 class="display-5 text-info">Quantum Circuit Simulator</h1>
-    <p class="lead text-light">Drag and drop gates onto the grid. Run circuit to see probabilities.</p>
+    <h1 class="display-5 text-dark">Quantum Circuit Simulator</h1>
+    <p class="lead text-dark">Drag and drop gates onto the grid. Run the circuit to see probabilities!</p>
   </div>
 
   <!-- Gate Palette -->
-  <div class="card bg-dark text-light mb-4 p-3">
+  <div class="card bg-light text-dark mb-4 p-3">
     <div class="d-flex flex-wrap justify-content-center">
-      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="H" data-bs-toggle="tooltip" title="Hadamard: Superposition">H</div>
-      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="X" data-bs-toggle="tooltip" title="X: Bit flip">X</div>
-      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="Z" data-bs-toggle="tooltip" title="Z: Phase flip">Z</div>
-      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="Y" data-bs-toggle="tooltip" title="Y: Bit+Phase flip">Y</div>
+      <div class="btn btn-outline-primary m-2 gate-tile" draggable="true" data-gate="H" data-bs-toggle="tooltip" title="Hadamard: Superposition">H</div>
+      <div class="btn btn-outline-success m-2 gate-tile" draggable="true" data-gate="X" data-bs-toggle="tooltip" title="X: Bit flip">X</div>
+      <div class="btn btn-outline-danger m-2 gate-tile" draggable="true" data-gate="Z" data-bs-toggle="tooltip" title="Z: Phase flip">Z</div>
+      <div class="btn btn-outline-warning m-2 gate-tile" draggable="true" data-gate="Y" data-bs-toggle="tooltip" title="Y: Bit+Phase flip">Y</div>
       <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="S" data-bs-toggle="tooltip" title="S: Phase rotation">S</div>
-      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="T" data-bs-toggle="tooltip" title="T: Phase rotation">T</div>
-      <div class="btn btn-outline-info m-2 gate-tile" draggable="true" data-gate="CNOT" data-bs-toggle="tooltip" title="CNOT: Entanglement">CNOT</div>
+      <div class="btn btn-outline-secondary m-2 gate-tile" draggable="true" data-gate="T" data-bs-toggle="tooltip" title="T: Phase rotation">T</div>
+      <div class="btn btn-outline-dark m-2 gate-tile" draggable="true" data-gate="CNOT" data-bs-toggle="tooltip" title="CNOT: Entanglement">CNOT</div>
     </div>
   </div>
 
@@ -36,23 +36,23 @@
 
   <!-- Circuit Grid -->
   <div id="circuit-container" class="overflow-auto p-2 mb-4">
-    <div id="grid" class="d-inline-block bg-dark p-3 rounded"></div>
+    <div id="grid" class="d-inline-block bg-light p-3 rounded"></div>
   </div>
 
   <!-- Output / Probability Bars -->
   <div id="output" class="text-center mb-4"></div>
 
   <!-- Legend / Info -->
-  <div class="card bg-secondary text-light p-3 mb-4">
+  <div class="card bg-light text-dark p-3 mb-4">
     <h4>Gate & Concept Info</h4>
-    <ul class="list-group list-group-flush text-light">
-      <li class="list-group-item bg-secondary">H: Hadamard - Superposition</li>
-      <li class="list-group-item bg-secondary">X: Bit flip |0> ↔ |1></li>
-      <li class="list-group-item bg-secondary">Z: Phase flip</li>
-      <li class="list-group-item bg-secondary">Y: X + Z</li>
-      <li class="list-group-item bg-secondary">S/T: Phase rotations</li>
-      <li class="list-group-item bg-secondary">CNOT: Entanglement</li>
-      <li class="list-group-item bg-secondary">Measurement collapses qubits to classical bits</li>
+    <ul class="list-group list-group-flush text-dark">
+      <li class="list-group-item">H: Hadamard - Superposition</li>
+      <li class="list-group-item">X: Bit flip |0> ↔ |1></li>
+      <li class="list-group-item">Z: Phase flip</li>
+      <li class="list-group-item">Y: X + Z</li>
+      <li class="list-group-item">S/T: Phase rotations</li>
+      <li class="list-group-item">CNOT: Entanglement</li>
+      <li class="list-group-item">Measurement collapses qubits to classical bits</li>
     </ul>
   </div>
 </div>
