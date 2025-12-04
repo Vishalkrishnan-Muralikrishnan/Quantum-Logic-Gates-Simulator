@@ -1,5 +1,6 @@
 let gates = [];
 let dragGate = null;
+let probChart = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.gate-tile').forEach(t => {
@@ -9,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Initialize Bootstrap tooltips
+  // Bootstrap tooltips
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map(function (el) { return new bootstrap.Tooltip(el); });
 });
@@ -29,7 +30,8 @@ function setupGrid(){
     }
     grid.appendChild(row);
   }
-  gates=[]; document.getElementById('output').innerHTML='';
+  gates=[]; 
+  if(probChart !== null){ probChart.destroy(); probChart = null; }
 }
 
 function placeGate(qubit,time){
@@ -59,12 +61,38 @@ async function simulate(){
 }
 
 function showProbs(probs){
-  const out=document.getElementById('output'); out.innerHTML='';
-  probs.forEach((p,i)=>{
-    const div=document.createElement('div'); 
-    div.innerText=`Qubit ${i}: ${(p*100).toFixed(1)}%`;
-    out.appendChild(div);
-    setTimeout(()=>{div.style.width=`${p*100}%`;},50);
-  });
+    const ctx = document.getElementById('probChart').getContext('2d');
+    const labels = probs.map((_, i) => `Qubit ${i+1}`);
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Probability of |1>',
+            data: probs.map(p => (p*100).toFixed(1)),
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            scales: {
+                y: { beginAtZero: true, max: 100, title: { display: true, text: 'Probability (%)' } }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context){ return context.parsed.y + '%'; }
+                    }
+                }
+            }
+        }
+    };
+
+    if(probChart !== null){ probChart.destroy(); }
+    probChart = new Chart(ctx, config);
 }
 
