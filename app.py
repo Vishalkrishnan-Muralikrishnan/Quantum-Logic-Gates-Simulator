@@ -26,24 +26,24 @@ def simulate():
             qc.x(qs[0])
         elif t == 'Z':
             qc.z(qs[0])
-        elif t == 'CNOT':
-            if len(qs)==2:
-                qc.cx(qs[0], qs[1])
-        elif t=='Y':
+        elif t == 'Y':
             qc.y(qs[0])
-        elif t=='S':
+        elif t == 'S':
             qc.s(qs[0])
-        elif t=='T':
+        elif t == 'T':
             qc.t(qs[0])
+        elif t == 'CNOT' and len(qs)==2:
+            qc.cx(qs[0], qs[1])
+
     qc.measure_all()
     job = sim.run(qc, shots=1000)
     result = job.result()
     counts = result.get_counts()
 
-    probs=[]
+    probs = []
     for i in range(num_qubits):
-        p1 = sum(v for k,v in counts.items() if k[num_qubits-1-i]=='1')
-        probs.append(p1/1000)
+        p1 = sum(v for k, v in counts.items() if k[num_qubits - 1 - i] == '1')
+        probs.append(p1 / 1000)
 
     return jsonify({'probabilities': probs})
 
