@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
+import os
 
 app = Flask(__name__)
 simulator = AerSimulator()
@@ -42,4 +43,6 @@ def run_circuit():
     return jsonify({'probabilities': probs})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))  # Get Render's port, default 5000 locally
+    app.run(host='0.0.0.0', port=port)
+
